@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Button</title>
+
+<!-- Better Font Combo -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .heart {
+    width: min(40vw, 160px);
+    height: min(40vw, 160px);
+    background: linear-gradient(45deg, #ff4d6d, #ff758c);
+    position: relative;
+    transform: rotate(-45deg);
+    cursor: pointer;
+    animation: beat 1s infinite;
+    box-shadow: 0 0 30px rgba(255, 0, 80, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    touch-action: manipulation;
+  }
+
+  .heart::before,
+  .heart::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .heart::before { top: -50%; left: 0; }
+  .heart::after { left: 50%; top: 0; }
+
+  @keyframes beat {
+    0%, 100% { transform: rotate(-45deg) scale(1); }
+    50% { transform: rotate(-45deg) scale(1.12); }
+  }
+
+  .text {
+    transform: rotate(45deg);
+    color: white;
+    text-align: center;
+    z-index: 2;
+    line-height: 1.2;
+  }
+
+  .text span {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px, 5vw, 26px);
+    letter-spacing: 1px;
+  }
+
+  .text small {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(10px, 3vw, 14px);
+    opacity: 0.9;
+  }
+
+  .spinner {
+    width: 25%;
+    height: 25%;
+    border: 4px solid white;
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    position: absolute;
+    display: none;
+    z-index: 2;
+  }
+
+  .loading {
+    animation: none;
+  }
+
+  .loading .text {
+    display: none;
+  }
+
+  .loading .spinner {
+    display: block;
+    transform: rotate(45deg);
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(45deg) rotate(0deg); }
+    100% { transform: rotate(45deg) rotate(360deg); }
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="heart" onclick="startLove(this)">
+  <div class="text">
+    <span>TOUCH ME BABY 💖</span>
+    <small>shhh...</small>
+  </div>
+  <div class="spinner"></div>
+</div>
+
+<script>
+  function startLove(el) {
+    el.classList.add("loading");
+
+    setTimeout(() => {
+      window.location.href = "x.html";
+    }, 2000);
+  }
+</script>
+
+</body>
+</html>

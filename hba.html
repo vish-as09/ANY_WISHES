@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+  }
+
+  /* 🔹 Background layer */
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .heart, .light {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  /* 💥 Heart blast */
+  .heart {
+    font-size: 20px;
+    animation: explode 2s ease-out forwards;
+  }
+
+  @keyframes explode {
+    0% {
+      transform: translate(50vw, 50vh) scale(0.5);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--x), var(--y)) scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  /* ✨ Lights */
+  .light {
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite;
+  }
+
+  @keyframes twinkle {
+    0%,100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  /* 💖 Message */
+  .message {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    top: 40%;
+    color: white;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+
+  .message h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 8vw, 50px);
+  }
+
+  .tap-hint {
+    margin-top: 20px;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .show {
+    opacity: 1;
+  }
+
+</style>
+</head>
+
+<body onclick="goNext()">
+
+<!-- 🔹 Background -->
+<div class="bg" id="bg"></div>
+
+<!-- 💖 Message -->
+<div class="message" id="msg">
+  <h1>Happiest Birthday</h1>
+  <h1>Mera Bachhru</h1>
+  <h3>Mera pyara bacha mera babu mera shona meri machri meri chugiya meri puchki meri shuggi hamar jaan hamar patarki hamaar praan my sweety my cutiepie my pookie my husband my hubby my honey my everthing </h3>
+
+  <div class="tap-hint">Tap anywhere 💫</div>
+</div>
+
+<script>
+  const bg = document.getElementById("bg");
+  const hearts = ["❤️","💖","💕","💘"];
+
+  let canClick = false; // control when tap works
+
+  function heartBlast() {
+    for (let i = 0; i < 80; i++) {
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.innerHTML = hearts[Math.floor(Math.random()*hearts.length)];
+
+      const x = (Math.random() - 0.5) * 100 + "vw";
+      const y = (Math.random() - 0.5) * 100 + "vh";
+
+      h.style.setProperty('--x', x);
+      h.style.setProperty('--y', y);
+
+      bg.appendChild(h);
+
+      setTimeout(() => h.remove(), 2000);
+    }
+  }
+
+  function createLights() {
+    for (let i = 0; i < 120; i++) {
+      const light = document.createElement("div");
+      light.className = "light";
+
+      light.style.left = Math.random()*100 + "vw";
+      light.style.top = Math.random()*100 + "vh";
+
+      bg.appendChild(light);
+    }
+  }
+
+  function goNext() {
+    if (canClick) {
+      window.location.href = "pin.html";
+    }
+  }
+
+  // 🎬 Sequence
+  heartBlast();
+
+  setTimeout(() => {
+    createLights();
+  }, 2500);
+
+  setTimeout(() => {
+    document.getElementById("msg").classList.add("show");
+  }, 5000);
+
+  setTimeout(() => {
+    canClick = true; // allow click AFTER message
+  }, 6000);
+
+</script>
+
+</body>
+</html>

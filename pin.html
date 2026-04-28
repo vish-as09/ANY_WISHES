@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enter Love PIN 💘</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .container {
+    padding: 20px;
+    width: 90%;
+    max-width: 350px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: clamp(24px, 6vw, 34px);
+    margin-bottom: 20px;
+  }
+
+  p {
+    color: white;
+    opacity: 0.9;
+    margin-bottom: 25px;
+  }
+
+  input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 25px;
+    border: none;
+    font-size: 18px;
+    text-align: center;
+    outline: none;
+    margin-bottom: 20px;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 25px;
+    border: none;
+    background: #ff4d6d;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(255,0,80,0.6);
+  }
+
+  .error {
+    color: white;
+    margin-top: 10px;
+    font-size: 14px;
+    display: none;
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Enter Love PIN 💖</h1>
+  <p>Only special people know this 😏</p>
+
+  <input type="password" id="pin" placeholder="Enter PIN">
+
+  <button onclick="checkPin()">Unlock 💘</button>
+
+  <div class="error" id="error">Wrong PIN... try again 🥺</div>
+</div>
+
+<script>
+  function checkPin() {
+    const pin = document.getElementById("pin").value;
+    const error = document.getElementById("error");
+
+    if (pin === "290406") {
+      window.location.href = "hba.html";
+    } else {
+      error.style.display = "block";
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be Mine?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    text-align: center;
+    width: 100%;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 8vw, 42px);
+    color: white;
+    margin-bottom: 40px;
+  }
+
+  /* 🔥 Controlled area */
+  .buttons {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    max-width: 400px;
+    margin: auto;
+  }
+
+  button {
+    padding: 12px 26px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    position: absolute;
+    transition: all 0.25s ease;
+  }
+
+  .yes {
+    left: 20%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ff4d6d;
+    color: white;
+  }
+
+  .no {
+    left: 60%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    color: #ff4d6d;
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Will you be mine? 💖</h1>
+
+  <div class="buttons" id="btnArea">
+    <button class="yes" onclick="goYes()">YES 💘</button>
+    <button class="no" id="noBtn" onclick="goNo()">NO 💔</button>
+  </div>
+</div>
+
+<script>
+  function goYes() {
+    window.location.href = "pin.html";
+  }
+
+  const noBtn = document.getElementById("noBtn");
+  const area = document.getElementById("btnArea");
+
+  let tries = 0;
+
+  function moveNo(e) {
+    tries++;
+
+    // after 3 tries → allow click
+    if (tries >= 3) {
+      noBtn.innerHTML = "OKAY 😢";
+      noBtn.onclick = () => {
+        window.location.href = "y.html";
+      };
+      return;
+    }
+
+    const areaRect = area.getBoundingClientRect();
+
+    const maxX = areaRect.width - noBtn.offsetWidth;
+    const maxY = areaRect.height - noBtn.offsetHeight;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    e.preventDefault(); // important for mobile
+  }
+
+  // move on hover + touch
+  noBtn.addEventListener("mouseover", moveNo);
+  noBtn.addEventListener("touchstart", moveNo);
+</script>
+</body>
+</html>
