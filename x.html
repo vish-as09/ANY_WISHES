@@ -82,7 +82,7 @@
 
 <script>
   function goYes() {
-    window.location.href = "pin.html";
+    window.location.href = "hba.html";
   }
 
   const noBtn = document.getElementById("noBtn");
@@ -94,7 +94,7 @@
     tries++;
 
     // after 3 tries → allow click
-    if (tries >= 3) {
+    if (tries >= 5) {
       noBtn.innerHTML = "OKAY 😢";
       noBtn.onclick = () => {
         window.location.href = "y.html";
