@@ -78,7 +78,7 @@
   <h1>Enter Love PIN 💖</h1>
   <p>Only special people know this 😏</p>
 
-  <input type="password" id="pin" placeholder="Enter PIN">
+  <input type="password" id="pin" placeholder="Enter PIN[123456]">
 
   <button onclick="checkPin()">Unlock 💘</button>
 
@@ -113,8 +113,8 @@
     const pin = pinInput.value;
     const error = document.getElementById('error');
 
-    if (pin === '290406') {
-      window.location.href = 'love.html';
+    if (pin === '123456') {
+      window.location.href = 'love.HTML';
     } else {
       error.style.display = 'block';
       playTick();
