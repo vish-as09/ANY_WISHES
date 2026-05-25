@@ -65,7 +65,7 @@
     position: relative;
     z-index: 10;
     text-align: center;
-    top: 40%;
+    top: 20%;
     color: white;
     opacity: 0;
     transition: opacity 1.5s ease;
@@ -77,13 +77,49 @@
   }
 
   .tap-hint {
-    margin-top: 20px;
-    font-size: 14px;
-    opacity: 0.8;
+    margin: 20px auto 0;
+    width: 64px;
+    height: 64px;
+    opacity: 0.95;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tap-hint svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   .show {
     opacity: 1;
+  }
+
+  .audio-button {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.26);
+    color: #222;
+    backdrop-filter: blur(14px);
+    cursor: pointer;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.16);
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .audio-button svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
   }
 
 </style>
@@ -94,13 +130,28 @@
 <!-- 🔹 Background -->
 <div class="bg" id="bg"></div>
 
+<audio id="birthday-audio" src="happy_birthday.mp3" loop preload="auto" autoplay></audio>
+<button id="audio-toggle" class="audio-button" type="button" aria-label="Pause music">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 5h4v14H6zm8 0h4v14h-4z" />
+  </svg>
+</button>
+
 <!-- 💖 Message -->
 <div class="message" id="msg">
   <h1>Happiest Birthday</h1>
   <h1>Mera Bachhru</h1>
-  <h3>Mera pyara bacha mera babu mera shona meri machri meri chugiya meri puchki meri shuggi hamar jaan hamar patarki hamaar praan my sweety my cutiepie my pookie my husband my hubby my honey my everthing </h3>
+  <h3>[love note eg: Mera pyara bacha mera babu mera shona meri machri meri chugiya meri puchki meri shuggi hamar jaan hamar patarki hamaar praan my sweety my cutiepie my pookie my husband my hubby my honey my everthing]</h3>
 
-  <div class="tap-hint">Tap anywhere 💫</div>
+  <div class="tap-hint" aria-label="Gift">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path fill="#fff" d="M52 28H34V18.68c0-3.16 2.56-5.72 5.72-5.72 1.63 0 3.13.68 4.2 1.76l2.11 2.1 2.12-2.1A6.435 6.435 0 0 1 48.28 13C51.44 13 54 15.56 54 18.72V28z" opacity="0.9"/>
+      <path fill="#fff" d="M32 28H12V18.72C12 15.56 14.56 13 17.72 13c1.63 0 3.13.68 4.2 1.76l2.11 2.1 2.12-2.1A6.435 6.435 0 0 1 33.28 13C36.44 13 39 15.56 39 18.72V28z" opacity="0.9"/>
+      <path fill="#fff" d="M54 32v22c0 3.31-2.69 6-6 6H16c-3.31 0-6-2.69-6-6V32h44z" opacity="0.85"/>
+      <path fill="#ff7bb7" d="M18 32h28v22H18z"/>
+      <path fill="#fff" d="M18 40h28v6H18zm0 10h28v4H18z" opacity="0.55"/>
+    </svg>
+  </div>
 </div>
 
 <script>
@@ -159,6 +210,64 @@
   setTimeout(() => {
     canClick = true; // allow click AFTER message
   }, 6000);
+
+  const birthdayAudio = document.getElementById('birthday-audio');
+  const audioToggle = document.getElementById('audio-toggle');
+
+  function updateAudioButton() {
+    if (!birthdayAudio || !audioToggle) return;
+    if (birthdayAudio.paused) {
+      audioToggle.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>';
+      audioToggle.setAttribute('aria-label', 'Play music');
+    } else {
+      audioToggle.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
+      audioToggle.setAttribute('aria-label', 'Pause music');
+    }
+  }
+
+  if (birthdayAudio) {
+    birthdayAudio.load();
+  }
+
+  if (audioToggle && birthdayAudio) {
+    audioToggle.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      if (birthdayAudio.paused) {
+        try {
+          await birthdayAudio.play();
+        } catch (err) {
+          // autoplay was blocked; still keep button visible
+        }
+      } else {
+        birthdayAudio.pause();
+      }
+      updateAudioButton();
+    });
+
+    async function tryAutoplay() {
+      try {
+        await birthdayAudio.play();
+        audioToggle.style.display = 'none';
+      } catch (err) {
+        audioToggle.style.display = 'inline-flex';
+        updateAudioButton();
+      }
+    }
+
+    async function tryUserGesture() {
+      if (!birthdayAudio.paused) return;
+      try {
+        await birthdayAudio.play();
+        audioToggle.style.display = 'none';
+      } catch (err) {
+        audioToggle.style.display = 'inline-flex';
+        updateAudioButton();
+      }
+    }
+
+    window.addEventListener('load', tryAutoplay);
+    document.addEventListener('click', tryUserGesture, { once: true });
+  }
 
 </script>
 
