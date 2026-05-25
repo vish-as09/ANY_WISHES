@@ -1,127 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Love Frames</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400&display=swap" rel="stylesheet">
-
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    height: 100vh;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    font-family: 'Poppins', sans-serif;
-  }
-
-  .container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* 💖 FRAME */
-  .frame {
-    position: absolute;
-    width: 65vw;
-    height: 37vh;  /* 👈 reduced to stop touching */
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.18);
-    border-radius: 16px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 15px rgba(255, 0, 80, 0.25);
-    overflow: hidden;
-
-    animation: floatUp 22s linear infinite; /* 👈 faster + better spacing */
-  }
-
-  /* 📸 IMAGE */
-  .image-area {
-    height: 70%;
-    overflow: hidden;
-  }
-
-  .image-area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 20%;
-  }
-
-  /* 💬 TEXT */
-  .content {
-    height: 30%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-    padding: 6px;
-  }
-
-  .content span {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-  }
-
-  .content small {
-    font-size: 12px;
-    opacity: 0.9;
-  }
-
-  /* 🚀 EXTRA DISTANCE = NO TOUCH */
-  @keyframes floatUp {
-    0% {
-      transform: translate(-50%, 130vh); /* 👈 start lower */
-      opacity: 0;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Frames</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-top:#1f3a70;
+      --bg-mid:#081231;
+      --bg-bottom:#02040c;
     }
-    10% { opacity: 1; }
-    85% { opacity: 1; }
-    100% {
-      transform: translate(-50%, -70vh); /* 👈 go higher */
-      opacity: 0;
-    }
-  }
 
-</style>
+    html,body{height:100%;}
+    body {
+      margin: 0;
+      overflow: hidden;
+      height: 100vh;
+      background: radial-gradient(circle at top, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bottom) 100%);
+      color: #f5f7ff;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
+
+    body::before{
+      content:'';
+      position:absolute;inset:0;pointer-events:none;
+      background: radial-gradient(circle at 20% 10%, rgba(255,255,255,0.02), transparent 10%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.01), transparent 12%);
+      opacity:0.6;mix-blend-mode:screen;
+    }
+
+    body::after{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
+      mix-blend-mode:multiply;
+    }
+
+    /* moon and clouds */
+    .sky-layer{position:absolute;inset:0;pointer-events:none;z-index:0}
+    .moon{
+      position:absolute;right:12%;top:8%;width:140px;height:140px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff9e6 0%, #fff1b8 25%, #ffe58a 40%, #f1e7c8 60%, rgba(240,240,240,0.02) 100%);
+      box-shadow:0 0 40px 12px rgba(255,235,160,0.08),0 0 120px 30px rgba(255,220,120,0.03) inset;filter:blur(0.6px);opacity:0.98;
+    }
+
+    .clouds{position:absolute;inset:0;overflow:hidden;z-index:0}
+    .cloud{position:absolute;left:-20%;top:10%;width:60%;height:140px;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));border-radius:100px;filter:blur(18px);transform:translate3d(0,0,0);opacity:0.7;animation:cloudDrift 60s linear infinite}
+    .cloud.c2{top:30%;left:-30%;width:80%;height:180px;animation-duration:80s;opacity:0.55}
+    .cloud.c3{top:50%;left:-10%;width:50%;height:120px;animation-duration:50s;opacity:0.45}
+    @keyframes cloudDrift{0%{transform:translateX(0)}100%{transform:translateX(140%)}}
+
+    .container{position:relative;width:100%;height:100%;z-index:2}
+
+    /* wrapper to position and animate each balloon-like card */
+    .float{
+      position:absolute;left:clamp(14%, var(--left,50%), 86%);top:100vh;transform:translateX(-50%);
+      /* square frames: use viewport-relative square size */
+      width:min(28vmin,320px);height:min(28vmin,320px);pointer-events:none;will-change:transform,opacity;
+      animation:rise var(--duration,12s) linear var(--delay,0s) both;
+    }
+
+    .frame{position:relative;width:100%;height:100%;background:rgba(255,255,255,0.06);border-radius:16px;backdrop-filter:blur(12px);box-shadow:0 8px 30px rgba(0,0,0,0.35);overflow:hidden;transform-origin:center center}
+    .image-area{height:70%;overflow:hidden}
+    .image-area img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+    .content{height:30%;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center;padding:6px}
+    .content span{font-family:'Playfair Display',serif;font-size:18px;text-shadow:0 2px 10px rgba(0,0,0,0.55)}
+    .content small{font-size:13px;opacity:0.9}
+
+    /* smooth upward motion */
+    @keyframes rise{
+      0%{transform:translateX(-50%) translateY(0) rotate(var(--rotStart,0deg)) scale(var(--scaleStart,1));opacity:0}
+      6%{opacity:1}
+      90%{opacity:1}
+      100%{transform:translateX(calc(-50% + var(--xEnd,0px))) translateY(var(--travelY,-180vh)) rotate(var(--rotEnd,10deg)) scale(var(--scaleEnd,0.96));opacity:0}
+    }
+
+    /* star styles */
+    .stars{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+    .star{position:absolute;will-change:transform,opacity;filter:drop-shadow(0 0 6px rgba(255,255,240,0.28));transform-origin:center;opacity:0.95}
+
+    @keyframes starTwinkle{0%{opacity:0.25;transform:scale(0.85) rotate(0deg)}50%{opacity:1;transform:scale(1.05) rotate(10deg)}100%{opacity:0.3;transform:scale(0.9) rotate(0deg)}}
+    @keyframes starFloat{0%{transform:translateY(0)}100%{transform:translateY(-4vh)}}
+
+    @media (max-width:720px){
+      /* on narrow screens make frames use most of the screen width (square) */
+      .float{width:82vw;height:82vw}
+      .moon{width:110px;height:110px}
+    }
+    /* audio control */
+    .audio-toggle{position:fixed;right:18px;bottom:18px;z-index:6;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);backdrop-filter:blur(6px);box-shadow:0 6px 18px rgba(0,0,0,0.35);cursor:pointer;color:#fff;border:0}
+    .audio-toggle svg{width:22px;height:22px;fill:currentColor}
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-
-  <!-- spacing = 22 / 5 = ~4.4s -->
-  <div class="frame" style="animation-delay:0s;">
-    <div class="image-area"><img src="1 (5).jpeg"></div>
-    <div class="content"><span>My Love ❤️</span><small>I ❤️ U my love</small></div>
+  <div class="sky-layer" aria-hidden="true">
+    <div class="moon"></div>
+    <div class="clouds" aria-hidden="true">
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+    </div>
   </div>
 
-  <div class="frame" style="animation-delay:4.4s;">
-    <div class="image-area"><img src="1 (1).jpeg"></div>
-    <div class="content"><span>Sweet Moment ❤️</span><small>You light up my life</small></div>
+  <div class="stars" aria-hidden="true"></div>
+
+  <div class="container">
+
+    <div class="float" style="--left:15%; --delay:0s; --duration:10s; --xEnd:6px; --travelY:-150vh; --rotEnd:6deg;">
+      <div class="frame">
+        <div class="image-area"><img src="1 (5).jpeg" alt="photo 1"></div>
+        <div class="content"><span>My Love ❤️</span><small>I ❤️ U my love</small></div>
+      </div>
+    </div>
+
+    <div class="float" style="--left:35%; --delay:5s; --duration:10s; --xEnd:-12px; --travelY:-150vh; --rotEnd:-8deg;">
+      <div class="frame">
+        <div class="image-area"><img src="1 (1).jpeg" alt="photo 2"></div>
+        <div class="content"><span>Sweet Moment ❤️</span><small>You light up my life</small></div>
+      </div>
+    </div>
+
+    <div class="float" style="--left:50%; --delay:10s; --duration:10s; --xEnd:18px; --travelY:-150vh; --rotEnd:10deg;">
+      <div class="frame">
+        <div class="image-area"><img src="1 (2).jpeg" alt="photo 3"></div>
+        <div class="content"><span>Only You ❤️</span><small>My heartbeat ❤️</small></div>
+      </div>
+    </div>
+
+    <div class="float" style="--left:67%; --delay:15s; --duration:10s; --xEnd:-20px; --travelY:-150vh; --rotEnd:-6deg;">
+      <div class="frame">
+        <div class="image-area"><img src="1 (3).jpeg" alt="photo 4"></div>
+        <div class="content"><span>Be Mine ❤️</span><small>Always yours ❤️</small></div>
+      </div>
+    </div>
+
+    <div class="float" style="--left:85%; --delay:20s; --duration:10s; --xEnd:18px; --travelY:-150vh; --rotEnd:12deg;">
+      <div class="frame">
+        <div class="image-area"><img src="1 (4).jpeg" alt="photo 5"></div>
+        <div class="content"><span>Having You ❤️</span><small>My biggest blessing ❤️</small></div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="frame" style="animation-delay:8.8s;">
-    <div class="image-area"><img src="1 (2).jpeg"></div>
-    <div class="content"><span>Only You ❤️</span><small>My heartbeat ❤️</small></div>
-  </div>
+  <script>
+    (function(){
+      const root = document.querySelector('.stars');
+      if(!root) return;
+      const ns = 'http://www.w3.org/2000/svg';
+      const rand = (a,b)=> Math.random()*(b-a)+a;
 
-  <div class="frame" style="animation-delay:13.2s;">
-    <div class="image-area"><img src="1 (3).jpeg"></div>
-    <div class="content"><span>Be Mine ❤️</span><small>Always yours ❤️</small></div>
-  </div>
+      function makeStar(size){
+        const svg = document.createElementNS(ns,'svg');
+        svg.setAttribute('width',size);
+        svg.setAttribute('height',size);
+        svg.setAttribute('viewBox',`0 0 ${size} ${size}`);
 
-  <div class="frame" style="animation-delay:17.6s;">
-    <div class="image-area"><img src="1 (4).jpeg"></div>
-    <div class="content"><span>Having You ❤️</span><small>My biggest blessing ❤️</small></div>
-  </div>
+        // defs for soft radial glow
+        const defs = document.createElementNS(ns,'defs');
+        const rg = document.createElementNS(ns,'radialGradient');
+        const id = 'g'+Math.floor(Math.random()*1000000);
+        rg.setAttribute('id',id);
+        const stop1 = document.createElementNS(ns,'stop'); stop1.setAttribute('offset','0%'); stop1.setAttribute('stop-color','#fffef6'); stop1.setAttribute('stop-opacity','1');
+        const stop2 = document.createElementNS(ns,'stop'); stop2.setAttribute('offset','60%'); stop2.setAttribute('stop-color','#fff5d6'); stop2.setAttribute('stop-opacity','0.8');
+        const stop3 = document.createElementNS(ns,'stop'); stop3.setAttribute('offset','100%'); stop3.setAttribute('stop-color','#ffeec2'); stop3.setAttribute('stop-opacity','0');
+        rg.appendChild(stop1);rg.appendChild(stop2);rg.appendChild(stop3);
+        defs.appendChild(rg);
+        svg.appendChild(defs);
 
-</div>
+        const cx = size/2, cy=size/2;
+        const circle = document.createElementNS(ns,'circle');
+        circle.setAttribute('cx',cx);circle.setAttribute('cy',cy);circle.setAttribute('r',size*0.45);
+        circle.setAttribute('fill',`url(#${id})`);
+        svg.appendChild(circle);
+
+        // tiny cross sparkle lines for subtle star shape
+        const line1 = document.createElementNS(ns,'rect');
+        line1.setAttribute('x',cx-0.5);line1.setAttribute('y',cy-size*0.18);line1.setAttribute('width',1);line1.setAttribute('height',size*0.36);line1.setAttribute('fill','#fffef6');line1.setAttribute('opacity','0.85');
+        const line2 = document.createElementNS(ns,'rect');
+        line2.setAttribute('x',cx-size*0.18);line2.setAttribute('y',cy-0.5);line2.setAttribute('width',size*0.36);line2.setAttribute('height',1);line2.setAttribute('fill','#fffef6');line2.setAttribute('opacity','0.7');
+        svg.appendChild(line1);svg.appendChild(line2);
+
+        return svg;
+      }
+
+      const total = 80;
+      for(let i=0;i<total;i++){
+        const size = Math.max(4, Math.round(rand(4,26)));
+        const star = makeStar(size);
+        const wrap = document.createElement('div');
+        wrap.className = 'star';
+        wrap.style.left = rand(2,98)+'%';
+        wrap.style.top = rand(2,92)+'%';
+        wrap.style.width = size+'px';
+        wrap.style.height = size+'px';
+        wrap.style.opacity = (rand(0.35,1)).toFixed(2);
+        const tw = rand(3.5,9.5).toFixed(2);
+        const delay = rand(0,6).toFixed(2);
+        wrap.style.animation = `starTwinkle ${tw}s ease-in-out ${delay}s infinite, starFloat ${rand(10,22).toFixed(1)}s linear ${delay}s infinite`;
+        wrap.appendChild(star);
+        root.appendChild(wrap);
+      }
+
+    })();
+  </script>
+
+  <!-- Background audio (use teri_ore instrument track) -->
+  <audio id="bg-audio" src="teri_ore_instrument.mp3" loop preload="auto" autoplay></audio>
+  <button id="audio-toggle" class="audio-toggle" aria-label="Play background music" title="Play music">
+    <!-- play icon -->
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+  </button>
+
+  <script>
+    (function(){
+      const audio = document.getElementById('bg-audio');
+      const btn = document.getElementById('audio-toggle');
+      if(!audio || !btn) return;
+      let playing = false;
+
+      function setIconPlay(){
+        btn.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>';
+        btn.setAttribute('aria-label','Play background music');
+      }
+      function setIconPause(){
+        btn.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+        btn.setAttribute('aria-label','Pause background music');
+      }
+
+      setIconPlay();
+
+      btn.addEventListener('click', async ()=>{
+        try{
+          if(!playing){
+            await audio.play();
+            playing = true; setIconPause();
+            btn.style.display = 'none';
+          } else {
+            audio.pause(); playing = false; setIconPlay();
+          }
+        }catch(e){
+          // if autoplay is blocked, try unmuting on interaction then play
+          try{ audio.muted = false; await audio.play(); playing = true; setIconPause(); btn.style.display = 'none'; }catch(_){ /* ignore */ }
+        }
+      });
+
+      async function tryAutoplay() {
+        try {
+          await audio.play();
+          playing = true;
+          setIconPause();
+          btn.style.display = 'none';
+        } catch (e) {
+          btn.style.display = 'inline-flex';
+          setIconPlay();
+        }
+      }
+
+      // keep button state in sync if audio ends/pauses externally
+      audio.addEventListener('pause', ()=>{ playing = false; setIconPlay(); btn.style.display = 'inline-flex'; });
+      audio.addEventListener('play', ()=>{ playing = true; setIconPause(); btn.style.display = 'none'; });
+
+      window.addEventListener('load', tryAutoplay);
+    })();
+  </script>
 
 </body>
 </html>
