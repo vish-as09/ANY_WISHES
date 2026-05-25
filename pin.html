@@ -86,14 +86,38 @@
 </div>
 
 <script>
-  function checkPin() {
-    const pin = document.getElementById("pin").value;
-    const error = document.getElementById("error");
+  const tickAudioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    if (pin === "290406") {
-      window.location.href = "hba.html";
+  function playTick() {
+    const osc = tickAudioContext.createOscillator();
+    const gain = tickAudioContext.createGain();
+    osc.type = 'square';
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.15, tickAudioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, tickAudioContext.currentTime + 0.06);
+    osc.connect(gain);
+    gain.connect(tickAudioContext.destination);
+    osc.start();
+    osc.stop(tickAudioContext.currentTime + 0.06);
+  }
+
+  const pinInput = document.getElementById('pin');
+  pinInput.addEventListener('keydown', () => {
+    if (tickAudioContext.state === 'suspended') {
+      tickAudioContext.resume();
+    }
+    playTick();
+  });
+
+  function checkPin() {
+    const pin = pinInput.value;
+    const error = document.getElementById('error');
+
+    if (pin === '290406') {
+      window.location.href = 'love.html';
     } else {
-      error.style.display = "block";
+      error.style.display = 'block';
+      playTick();
     }
   }
 </script>
