@@ -1,1 +1,1 @@
-WISHES
+WISHES like [Birthday Wish]
